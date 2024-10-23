@@ -1,6 +1,9 @@
 # Licence Terms Privacy checker extension
 Experiment to create an extension that gathers the licencing terms from a site, summarises and attempts to extract if there is any explicit mention of selling your private data in any form.
 
+## Important
+WIP Only - totally not finished so probably wont do anything yet :-)
+
 An edge extension (only tested in edge thus far).
 
 # How to use
