@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "License Terms Extractor",
+  "version": "1.0",
+  "description": "Extracts licensing terms from web pages.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
