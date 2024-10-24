@@ -5,7 +5,8 @@
   "description": "Extracts licensing terms from web pages.",
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "identity"
   ],
   "background": {
     "service_worker": "background.js"

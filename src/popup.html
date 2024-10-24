@@ -2,17 +2,28 @@
 <html>
 <head>
   <title>License Terms Extractor</title>
-  <script>
-    console.log("loaded");
-    function testclick() {
-        console.log("testclick");
-      alert("testclick");
-    }
-    </script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script> -->
 </head>
 <body>
+  <h1>License Terms Extractor</h1>
+  <p>Note: Requires an instance of Azure OpenAI and a deployment of GPT-4o</p>
+  <div>
+    <label for="aoaiEndpoint" >AOAI Endpoint:</label>
+    <input type="text" id="aoaiEndpoint" placeholder="Enter your Azure OpenAI Endpoint" > </p>
+  </div>
+  <div>
+    <label for="deploymentName" >GPT-4o deployment name:</label>
+    <input type="text" id="deploymentName" placeholder="Enter your Azure OpenAI GPT-4o deployment name" value="gpt-4o"> </p>
+  </div>
+  <div>
+    <label for="apiVersion">API Version:</label>
+    <input type="text" id="apiVersion" placeholder="Enter your Azure OpenAI GPT-4o API version" value="2024-02-15-preview">
+  </div>
+  <div>
+    <label for="apiKey">API Key:</label>
+    <input type="password" id="apiKey" placeholder="Enter your Azure OpenAI API key">
+  </div>
   <button id="extract">Extract License Terms</button>
-  <button id="testbtn" onclick="testclick()">test</button>
 </body>
 <script src="popup.js"></script>
 </html>
