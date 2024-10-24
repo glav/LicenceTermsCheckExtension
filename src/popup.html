@@ -4,26 +4,55 @@
   <title>License Terms Extractor</title>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script> -->
 </head>
+<style>
+  body {
+    width: 300px;
+    padding: 10px;
+  }
+  input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  button {
+    width: 100%;
+    margin-top: 10px;
+  }
+  #spinner {
+    display: none;
+    text-align: center;
+    img {
+      width: 50%;
+    }
+  }
+  #content {
+    display: block;
+  }
+</style>
 <body>
   <h1>License Terms Extractor</h1>
   <p>Note: Requires an instance of Azure OpenAI and a deployment of GPT-4o</p>
-  <div>
-    <label for="aoaiEndpoint" >AOAI Endpoint:</label>
-    <input type="text" id="aoaiEndpoint" placeholder="Enter your Azure OpenAI Endpoint" > </p>
+  <div id="content">
+    <div>
+      <label for="aoaiEndpoint" >AOAI Endpoint:</label>
+      <input type="text" id="aoaiEndpoint" placeholder="Enter your Azure OpenAI Endpoint" > </p>
+    </div>
+    <div>
+      <label for="deploymentName" >GPT-4o deployment name:</label>
+      <input type="text" id="deploymentName" placeholder="Enter your Azure OpenAI GPT-4o deployment name" value="gpt-4o"> </p>
+    </div>
+    <div>
+      <label for="apiVersion">API Version:</label>
+      <input type="text" id="apiVersion" placeholder="Enter your Azure OpenAI GPT-4o API version" value="2024-02-15-preview">
+    </div>
+    <div>
+      <label for="apiKey">API Key:</label>
+      <input type="password" id="apiKey" placeholder="Enter your Azure OpenAI API key">
+    </div>
+    <button id="extract">Extract License Terms</button>
   </div>
-  <div>
-    <label for="deploymentName" >GPT-4o deployment name:</label>
-    <input type="text" id="deploymentName" placeholder="Enter your Azure OpenAI GPT-4o deployment name" value="gpt-4o"> </p>
+  <div id="spinner">
+    <img src="tenor.gif" alt="Loading..." />
   </div>
-  <div>
-    <label for="apiVersion">API Version:</label>
-    <input type="text" id="apiVersion" placeholder="Enter your Azure OpenAI GPT-4o API version" value="2024-02-15-preview">
-  </div>
-  <div>
-    <label for="apiKey">API Key:</label>
-    <input type="password" id="apiKey" placeholder="Enter your Azure OpenAI API key">
-  </div>
-  <button id="extract">Extract License Terms</button>
 </body>
 <script src="popup.js"></script>
 </html>
