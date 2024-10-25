@@ -1,18 +1,38 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  sendResponse('event message: [' + request.action + '] received');
   if (request.action === 'extractLicenseTerms') {
-    document.getElementById('content').style.display = 'none';
-    document.getElementById('spinner').style.display = 'block';
+    toggleSpinner(true);
     console.log('Message received to extract license terms');
   }
   if (request.action === 'end-extractLicenseTerms') {
+    toggleSpinner(false);
+    console.log('Message received to end-extract license terms');
+    showResults(request.data); 
+  }
+  if (request.action === 'error') {
+    toggleSpinner(false);
+    alert('An error occurred. Configuration values may be incorrect or too many requests.');
+  }
+});
+
+function toggleSpinner(showSpinner) {
+  if (showSpinner === true) {
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('spinner').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+  } else {
     document.getElementById('content').style.display = 'block';
     document.getElementById('spinner').style.display = 'none';
-    console.log('Message received to extract license terms');
   }
-  sendResponse('event message: [' + request.action + '] received');
-//  return true;
+}
 
-});
+function showResults(results) {
+  const el = document.getElementById('results');
+  el.innerHTML = results;
+  el.style.display = 'block';
+
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   chrome.storage.local.get(['oaiDetails'], (result) => {
     if (result.oaiDetails) {
@@ -34,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         files: ['popup.js']
   //      function: extractLicenseTerms
       }, () => {
+        toggleSpinner(false);
         chrome.tabs.sendMessage(tabs[0].id, { aoaiDetails: oaiDetails  });
       });
     });
@@ -61,20 +82,3 @@ function getAoaiDetails() {
   return oaiDetails;
 }
   
-  
-console.log('in popup.js');
-
-// This function is executed in the context of the browser tab (via chrome.scripting.executeScript) and not in the popup window.
-// NOT popup.js and so when it is executed, it wont be in the same scope as popup.js and the getAoaiDetails() function will not be available.
-// function extractLicenseTerms() {
-//   console.log('in extractLicenseTerms');
-//   const terms = document.body.innerText.match(/(terms of service|license agreement|user agreement|privacy policy|terms and conditions)/i);
-//   //console.log(document.body.innerText);
-//   if (terms) {
-//     //alert("License Terms Found: " + terms[0]);
-//     console.log("License Terms Found: " + terms[0]);
-    
-//   } else {
-//     alert("No license terms found on this page.");
-//   }
-// }
