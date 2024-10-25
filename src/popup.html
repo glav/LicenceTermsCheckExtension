@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>License Terms Extractor</title>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script> -->
 </head>
 <style>
   body {
-    width: 300px;
     padding: 10px;
+    width: 330px;
+    padding: 10px;
+    height: 350px;
   }
   input {
     width: 100%;
@@ -26,6 +28,24 @@
   }
   #content {
     display: block;
+  }
+  #results {
+    display: none;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    overflow-y: scroll;
+    height: 195px;
+  }
+  #risks {
+    color: red;
+  }
+  #key-points {
+    color: midnightblue
+  }
+  #risks ul {
+    font-size: 110%;
+    font-weight: bold;
   }
 </style>
 <body>
@@ -52,6 +72,9 @@
   </div>
   <div id="spinner">
     <img src="tenor.gif" alt="Loading..." />
+  </div>
+  <div id="results">
+
   </div>
 </body>
 <script src="popup.js"></script>

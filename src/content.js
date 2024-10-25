@@ -1,18 +1,11 @@
-// trying to hook into this from popup.js does not work since content.js is in browser tab page content and popup.js is in the popup window.
-// function extractLicenseTerms() {
-//   const terms = document.body.innerText.match(/(terms of service|license agreement|user agreement|privacy policy|terms and conditions)/i);
-//   //console.log(document.body.innerText);
-//   if (terms) {
-//     alert("License Terms Found: " + terms[0]);
-//   } else {
-//     alert("No license terms found on this page.");
-//   }
-// }
-  //extractLicenseTerms();
-  console.log('adding message listener');
 
-function fireDomainEvent(eventName) {
-  chrome.runtime.sendMessage({ action: eventName }, response => {
+
+function fireDomainEvent(eventName, eventData) {
+  let msg = { action: eventName };
+  if (eventData) {
+    msg.data = eventData;
+  }
+  chrome.runtime.sendMessage(msg, response => {
     if (chrome.runtime.lastError) {
       console.error("Error sending message:", chrome.runtime.lastError);
     } else {
@@ -45,9 +38,7 @@ function processAoaiDetails(aoaiDetails) {
 function extractLicenseTerms() {
   console.log('in extractLicenseTerms');
   const terms = document.body.innerText.match(/(terms of service|license agreement|user agreement|privacy policy|terms and conditions)/i);
-  //console.log(document.body.innerText);
   if (terms) {
-    //alert("License Terms Found: " + terms[0]);
     console.log("License Terms Found");
     return document.body.innerText;
     
@@ -57,7 +48,6 @@ function extractLicenseTerms() {
 }
 
 function callOpenAI(aoaiEndpoint, deploymentName, apiVersion, apiKey, context) {
-  //"https://aoai-evaltest.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-02-15-preview"
   const endpoint = `${aoaiEndpoint}/openai/deployments/${deploymentName}/chat/completions?api-version=${apiVersion}`;
   const headers = {
     "Content-Type": "application/json",
@@ -81,14 +71,30 @@ function callOpenAI(aoaiEndpoint, deploymentName, apiVersion, apiKey, context) {
             "type": "text",
             "text": "Can you summarise the privacy policy of this website provided in the context as succinctly as possible?" + 
                     "If there is any mention or potential risk of personal data being sold, shared or distributed,"+
-                    "please highlight it and ensure this information is noted at the top of your summary. Context: " + context
+                    "please highlight it and ensure this information is noted at the top of your summary. " +
+                    "You will use the following template to provide the summary: " +
+                    "<h2>Privacy Policy Summary</h2> " +
+                    "<div id='risks'><h3>Potential Risks</h3> " +
+                    "<ul>" +
+                    "<li>{risk_1}</l1>" +
+                    "</ul>" +
+                    "<ul>" +
+                    "<l1>{risk_2}</l1>" +
+                    "</ul></div>" +
+                    "<div id='key-points'><h4 >Key points</h4> " +
+                    "<ul>" +
+                    "<l1>{key_point_1}</l1>" +
+                    "<l1>{key_point_2}</l1>" +
+                    "</ul></div>" +
+
+                    " Context: " + context
           }
         ]
       }
     ],
     "temperature": 0.7,
     "top_p": 0.95,
-    "max_tokens": 800
+    "max_tokens": 2000
   }
 
   console.log('Calling OpenAI API:', endpoint);
@@ -100,14 +106,10 @@ function callOpenAI(aoaiEndpoint, deploymentName, apiVersion, apiKey, context) {
   })
   .then(response => response.json())
   .then(data => {
-    //console.log('OpenAI API response:', data);
-    fireDomainEvent('end-extractLicenseTerms');
-    alert(data.choices[0].message.content);
-    // console.log("** SUMMARY **");
-    // console.log(data.choices[0].message.content);
-
+    fireDomainEvent('end-extractLicenseTerms',data.choices[0].message.content);
   })
   .catch(error => {
+    fireDomainEvent('error');
     console.error('Error calling OpenAI API:', error);
   });
   
